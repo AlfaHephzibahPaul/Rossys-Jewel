@@ -1,62 +1,38 @@
-import Link from "next/link";
-import ProductCard from "@/components/ProductCard";
-import { categories, products } from "@/lib/products";
+import { supabaseServer, imageUrl } from "@/lib/supabase/server";
+import Shop, { type Item } from "@/components/Shop";
 
-const layout = [
-  { span: "md:col-span-7", aspect: "aspect-[5/6]" },
-  { span: "md:col-span-5 md:mt-24", aspect: "aspect-[4/5]" },
-  { span: "md:col-span-4", aspect: "aspect-square" },
-  { span: "md:col-span-4 md:mt-10", aspect: "aspect-[4/5]" },
-  { span: "md:col-span-4", aspect: "aspect-square" },
-];
+export default async function Home() {
+  const sb = await supabaseServer();
+  const [{ data: cats }, { data: rows }] = await Promise.all([
+    sb.from("categories").select("name").order("sort"),
+    sb.from("products").select("id,name,price_ngn,image_path,categories(name)").eq("is_visible", true).order("created_at", { ascending: false }),
+  ]);
+  const items: Item[] = (rows ?? []).map((r) => ({
+    id: r.id,
+    name: r.name,
+    price: r.price_ngn,
+    category: (r.categories as unknown as { name: string } | null)?.name ?? "",
+    image: imageUrl(r.image_path),
+  }));
 
-export default function Home() {
   return (
     <>
-      <section className="bg-midnight text-ivory">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-12 md:grid-cols-12">
-          <div className="md:col-span-7 md:pt-16">
-            <h1 className="font-display text-5xl leading-[1.05] sm:text-7xl">
-              Jewellery that speaks quietly and is remembered loudly.
+      <section className="bg-blush">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-5 pb-14 pt-4 md:grid-cols-[1.2fr_.8fr]">
+          <div>
+            <h1 className="font-display text-5xl leading-[1.1] sm:text-6xl">
+              Shine without <em className="text-accent">saying</em> a word.
             </h1>
-            <p className="mt-6 max-w-md text-ivory/75">
-              Handcrafted necklaces, earrings, bracelets and rings, made to be worn every day and kept for years.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/shop" className="border border-gold bg-midnight px-6 py-3 text-gold hover:bg-gold hover:text-midnight">
-                Shop the collection
-              </Link>
-              <a href="https://wa.me/2347012091168" className="px-2 py-3 underline underline-offset-4 decoration-rosegold">
-                Order on WhatsApp
-              </a>
-            </div>
+            <p className="mt-5 max-w-sm text-muted">Jewellery, watches and accessories from Rossy's Jewel, where elegance lives.</p>
+            <a href="#shop" className="mt-6 inline-block border border-accent bg-accent px-6 py-3 font-medium text-white hover:brightness-110">Shop the collection</a>
           </div>
-          <div className="md:col-span-5">
-            <div className="aspect-[4/5] bg-gradient-to-b from-slate to-gold/40" role="img" aria-label="Featured piece" />
-          </div>
-        </div>
+<div className="grid aspect-square w-full max-w-[340px] place-items-center justify-self-center border border-line bg-panel text-accent shadow-md">
+  <svg viewBox="0 0 32 28" className="w-1/2" fill="none" stroke="currentColor" strokeWidth=".5" strokeLinejoin="round" aria-hidden="true">
+    <path d="M8 2h16l7 8-15 16L1 10zM1 10h30M11 10l5 16 5-16M8 2l3 8M24 2l-3 8" />
+  </svg>
+</div>        </div>
       </section>
-
-      <section className="mx-auto max-w-6xl px-5 py-16">
-        <ul className="flex flex-wrap gap-x-8 gap-y-2 font-display text-2xl sm:text-3xl">
-          {categories.map((c) => (
-            <li key={c}>
-              <Link href={`/shop?category=${encodeURIComponent(c)}`} className="hover:text-gold">{c}</Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 pb-24">
-        <h2 className="mb-8 font-display text-3xl">Just arrived</h2>
-        <div className="grid gap-x-8 gap-y-12 md:grid-cols-12">
-          {products.map((p, i) => (
-            <div key={p.slug} className={layout[i].span}>
-              <ProductCard p={p} aspect={layout[i].aspect} />
-            </div>
-          ))}
-        </div>
-      </section>
+      <Shop items={items} categories={(cats ?? []).map((c) => c.name)} />
     </>
   );
 }
