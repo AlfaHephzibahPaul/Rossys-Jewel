@@ -1,5 +1,9 @@
 export const WHATSAPP = "2347012091168";
+// Change this:
+// import { naira, type Product } from "@/lib/products";
 
+// To this (adjust the dots "../" depending on your folder depth):
+import { naira, type Product } from "../lib/products";
 export type Product = {
   id: string;
   name: string;
