@@ -7,6 +7,7 @@ export interface Product {
   description?: string;
   category?: string;
   tone?: string;
+  material?: string;
 }
 
 export const WHATSAPP = "+2347012091168"; // Replace with your actual WhatsApp contact number
@@ -27,6 +28,7 @@ export const products: Product[] = [
     description: "Elegant gold necklace crafted for special occasions.",
     category: "Necklaces",
     tone: "from-amber-200 to-yellow-500",
+    material: "18k Solid Gold",
   },
   {
     id: "2",
@@ -36,5 +38,6 @@ export const products: Product[] = [
     description: "Timeless diamond-studded earrings.",
     category: "Earrings",
     tone: "from-slate-200 to-zinc-400",
+    material: "Platinum & Diamond",
   },
 ];
