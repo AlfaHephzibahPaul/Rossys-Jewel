@@ -11,3 +11,4 @@ export const naira = (n: number) =>
   new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(n);
 
 // Keep your existing product list/data array below if you have one!
+export const WHATSAPP = "+2347012091168"; // Replace with your actual WhatsApp contact number or link
