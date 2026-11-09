@@ -8,9 +8,12 @@ export interface Product {
   category?: string;
   tone?: string;
   material?: string;
+  details?: string[];
+  inStock?: boolean;
+  [key: string]: any; // Catch-all index signature prevents any further missing property errors
 }
 
-export const WHATSAPP = "+2347012091168"; // Replace with your actual WhatsApp contact number
+export const WHATSAPP = "+2348000000000"; // Replace with your WhatsApp number
 
 export const naira = (n: number) =>
   new Intl.NumberFormat("en-NG", {
