@@ -26,7 +26,7 @@ export default async function Admin() {
             <div><label htmlFor="name" className="mb-1.5 block text-sm font-medium">Product name</label><input id="name" name="name" required className={field} /></div>
             <div><label htmlFor="cat" className="mb-1.5 block text-sm font-medium">Category</label>
               <select id="cat" name="category_id" className={field}>{cats?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
-            <div><label htmlFor="price" className="mb-1.5 block text-sm font-medium">Price (₦)</label><input id="price" name="price" type="number" min="1" step="500" required className={field} /></div>
+            <div><label htmlFor="price" className="mb-1.5 block text-sm font-medium">Price (₦)</label><input id="price" name="price" type="number" min="1" step="1" required className={field} /></div>
           </div>
           <div><label htmlFor="photo" className="mb-1.5 block text-sm font-medium">Photo (optional)</label><input id="photo" name="photo" type="file" accept="image/*" className={field} /></div>
           <div><button className="bg-accent px-5 py-3 text-sm font-medium text-white hover:brightness-110">Add product</button></div>
